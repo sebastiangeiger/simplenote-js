@@ -311,7 +311,8 @@ function SimpleNote() {
   */
   
   function _parseTimestamp( string ) {
-    if ( !( /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{6}$/.test( string ) ) ) {
+    if ( !( /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}(\.\d{6})?$/.test( string ) ) ) {
+      console.error("String did not match the timestamp RegExp: " + string);
       throw "ArgumentError: string must be in the correct form (for example, '2008-12-18 04:04:20.554442')";
     }
     
@@ -324,8 +325,11 @@ function SimpleNote() {
     d.setUTCHours( seg[ 3 ] );
     d.setUTCMinutes( seg[ 4 ] );
     d.setUTCSeconds( seg[ 5 ] );
-    d.setUTCMilliseconds( seg[ 6 ].substr( 0, 3 ) );
-
+    var milliseconds = 0;
+    if(seg[ 6 ] && seg[ 6 ].substr( 0, 3 )){
+      milliseconds = seg[ 6 ].substr( 0, 3 );
+    }
+    d.setUTCMilliseconds( milliseconds );
     return d;
   }
   
